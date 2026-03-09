@@ -117,54 +117,60 @@ export function DocumentUpload() {
   const canSubmit = state.status === 'SELECTED' && state.file && state.file.size > 0 && state.documentType && !isPending;
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Upload Insurance Document
-        </h1>
-        <p className="text-sm text-gray-600 mb-6">
-          Please upload supporting documents to verify your policy discount eligibility
-        </p>
-
-        {/* Document Type Selector */}
-        <DocumentTypeSelector
-          value={state.documentType}
-          onChange={handleDocumentTypeChange}
-          disabled={state.status !== 'IDLE' && state.status !== 'SELECTED'}
-        />
-
-        {/* Upload Zone or File Preview */}
-        <div className="mt-6">
-          {state.file && state.file.size > 0 && state.status !== 'IDLE' ? (
-            <FilePreview file={state.file} onRemove={handleRemoveFile} />
-          ) : (
-            <UploadZone
-              onFileSelect={handleFileSelect}
-              disabled={state.status !== 'IDLE' && state.status !== 'SELECTED'}
-            />
-          )}
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-black text-gray-900 mb-3">
+            Upload Insurance Document
+          </h1>
+          <p className="text-base text-gray-600 max-w-2xl mx-auto">
+            Upload supporting documents to verify your policy discount eligibility. We'll process your document and verify the details instantly.
+          </p>
         </div>
 
-        {/* Submit Button */}
-        {canSubmit && (
-          <button
-            onClick={handleSubmit}
-            className="mt-6 w-full bg-aa-primary text-white py-3 px-4 rounded-lg hover:bg-blue-800 transition-colors font-medium"
-          >
-            Submit Document
-          </button>
-        )}
+        {/* Main Card */}
+        <div className="card-aa p-8 md:p-12">
+          {/* Document Type Selector */}
+          <DocumentTypeSelector
+            value={state.documentType}
+            onChange={handleDocumentTypeChange}
+            disabled={state.status !== 'IDLE' && state.status !== 'SELECTED'}
+          />
 
-        {/* Status Display */}
-        <StatusDisplay status={state.status} progress={state.progress} />
+          {/* Upload Zone or File Preview */}
+          <div className="mt-8">
+            {state.file && state.file.size > 0 && state.status !== 'IDLE' ? (
+              <FilePreview file={state.file} onRemove={handleRemoveFile} />
+            ) : (
+              <UploadZone
+                onFileSelect={handleFileSelect}
+                disabled={state.status !== 'IDLE' && state.status !== 'SELECTED'}
+              />
+            )}
+          </div>
 
-        {/* Result Summary */}
-        <ResultSummary
-          result={state.result}
-          error={state.error}
-          onRetry={handleRetry}
-          onReset={handleReset}
-        />
+          {/* Submit Button */}
+          {canSubmit && (
+            <button
+              onClick={handleSubmit}
+              className="btn-aa-primary mt-8 w-full text-base"
+            >
+              Submit Document for Verification
+            </button>
+          )}
+
+          {/* Status Display */}
+          <StatusDisplay status={state.status} progress={state.progress} />
+
+          {/* Result Summary */}
+          <ResultSummary
+            result={state.result}
+            error={state.error}
+            onRetry={handleRetry}
+            onReset={handleReset}
+          />
+        </div>
       </div>
     </div>
   );

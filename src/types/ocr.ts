@@ -44,6 +44,7 @@ export interface DocumentTypeMetadata {
   value: DocumentType;
   label: string;
   description: string;
+  icon?: React.ReactNode;
 }
 
 /**

@@ -1,8 +1,14 @@
 # AA Ireland Motor Insurance Document Upload Portal
 
-[![CI/CD Pipeline](https://github.com/YOUR_USERNAME/AAWorflow/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/AAWorflow/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/fernandohermida/aa-doc-upload/actions/workflows/ci.yml/badge.svg)](https://github.com/fernandohermida/aa-doc-upload/actions/workflows/ci.yml)
 
 Production-quality React + TypeScript document upload portal with simulated OCR validation for AA Ireland's motor insurance customer journey.
+
+## 🚀 Live Demo
+
+**[View Live Application →](https://aa-doc-upload.vercel.app/)**
+
+
 
 ## Features
 
@@ -215,7 +221,6 @@ The pipeline runs on every push and pull request, ensuring code quality before d
 - Security headers (CSP, X-Frame-Options, etc.)
 - Optimized caching for static assets
 
-**Live Demo:** [Deployed URL will appear after connecting to Vercel]
 
 ## Supported Document Types
 
@@ -236,21 +241,11 @@ Technical error codes are automatically translated to user-friendly messages:
 | UNSUPPORTED_FORMAT | "This document format couldn't be processed. Please try a different file." |
 | OCR_SERVICE_UNAVAILABLE | "Our verification service is temporarily unavailable. Please try again in a moment." |
 
-## Future Enhancements
 
-- Real OCR API integration (Azure AI Document Intelligence)
-- Multi-document session persistence
-- Advanced file previews (thumbnails)
-- Increased test coverage (component integration tests)
-- Accessibility improvements (WCAG 2.1 AA compliance)
-- Internationalization (i18n)
-- Retry with exponential backoff
-- Offline detection
-- Performance monitoring (Lighthouse CI)
 
 ## Interview Demonstration Points
 
-### Senior Full-Stack Capabilities Demonstrated
+
 
 1. **Testing Culture:**
    - Vitest configuration with happy-dom environment
@@ -282,11 +277,3 @@ Technical error codes are automatically translated to user-friendly messages:
    - Well-tested business logic
    - Clean architecture with separation of concerns
 
-## License
-
-Proprietary - AA Ireland Technical Assessment
-
-## Author
-
-Technical Assessment - Round 2
-Date: March 8, 2026

@@ -5,11 +5,34 @@
 @layer base {
   body {
     @apply antialiased;
+    @apply bg-gray-50;
+  }
+}
+
+@layer components {
+  /* AA Ireland Brand Button */
+  .btn-aa-primary {
+    @apply bg-aa-yellow text-black font-bold px-6 py-3 rounded-xl;
+    @apply hover:bg-yellow-400 active:bg-yellow-500;
+    @apply transition-all duration-200 shadow-lg hover:shadow-xl;
+    @apply transform hover:-translate-y-0.5;
+  }
+
+  /* AA Ireland Card */
+  .card-aa {
+    @apply bg-white rounded-3xl shadow-2xl border border-gray-100;
   }
 }
 
 @layer utilities {
   .animate-spin-slow {
     animation: spin 3s linear infinite;
+  }
+
+  .text-gradient-aa {
+    background: linear-gradient(135deg, #FFCC00 0%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

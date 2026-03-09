@@ -7,7 +7,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        'aa-primary': '#003366',
+        // AA Ireland Brand Colors
+        'aa-yellow': '#FFCC00',
+        'aa-black': '#000000',
+        'aa-primary': '#FFCC00',
+        'aa-secondary': '#1a1a1a',
+
+        // Semantic colors that work with yellow/black theme
         'aa-success': '#10b981',
         'aa-warning': '#f59e0b',
         'aa-error': '#ef4444',
