@@ -44,10 +44,7 @@ function App() {
         <footer className="bg-aa-black border-t border-gray-800">
           <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
-              <p className="text-gray-400">
-                &copy; 2026 AA Ireland. All rights reserved.
-              </p>
-              <span className="hidden sm:inline text-gray-600">•</span>
+    
               <p className="text-gray-400">
                 Developed by{' '}
                 <a
