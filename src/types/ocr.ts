@@ -21,21 +21,66 @@ export type UploadState =
   | 'ERROR';
 
 /**
- * OCR service result structure
+ * Extracted data for No Claims Bonus documents
  */
-export interface OcrResult {
-  status: OcrStatus;
-  docType: DocumentType;
-  reason?: string; // Present on rejection
-  extractedData?: Record<string, unknown>; // Present on success
+export interface NcbExtractedData {
+  yearsNoClaims: number;
+  insurerName: string;
+  validFrom: string;
 }
 
 /**
- * Typed OCR service errors
+ * Extracted data for Gap in Cover documents
  */
-export interface OcrServiceError extends Error {
-  code: 'OCR_SERVICE_UNAVAILABLE' | 'TIMEOUT' | 'INVALID_FILE';
+export interface GapCoverExtractedData {
+  gapDays: number;
+  reason: string;
+  validFrom: string;
+  validTo: string;
 }
+
+/**
+ * Extracted data for Policy Schedule documents
+ */
+export interface PolicyScheduleExtractedData {
+  insurer: string;
+  policyNumber: string;
+  effectiveDate: string;
+}
+
+/**
+ * Union type for all extracted data possibilities
+ */
+export type ExtractedData = NcbExtractedData | GapCoverExtractedData | PolicyScheduleExtractedData;
+
+/**
+ * Base interface for OCR results
+ */
+interface OcrResultBase {
+  docType: DocumentType;
+}
+
+/**
+ * OCR result when document is verified successfully
+ */
+export interface OcrResultVerified extends OcrResultBase {
+  status: 'verified';
+  extractedData: ExtractedData;
+}
+
+/**
+ * OCR result when document is rejected
+ */
+export interface OcrResultRejected extends OcrResultBase {
+  status: 'rejected';
+  reason: string;
+}
+
+/**
+ * OCR service result structure (discriminated union)
+ * Type narrows automatically based on status field
+ */
+export type OcrResult = OcrResultVerified | OcrResultRejected;
 
 /**
  * Document type metadata for UI display

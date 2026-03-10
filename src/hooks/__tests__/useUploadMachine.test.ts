@@ -170,6 +170,7 @@ describe('useUploadMachine - Reducer Tests', () => {
         extractedData: {
           yearsNoClaims: 5,
           insurerName: 'Test Insurance',
+          validFrom: '2023-01-01',
         },
       }
       const action: UploadAction = {
@@ -290,7 +291,11 @@ describe('useUploadMachine - Reducer Tests', () => {
         result: {
           status: 'verified',
           docType: 'POLICY_SCHEDULE',
-          extractedData: { insurer: 'Test Co.' },
+          extractedData: {
+            insurer: 'Test Co.',
+            policyNumber: 'POL123456',
+            effectiveDate: '2023-01-01',
+          },
         },
         error: null,
         progress: 100,
@@ -344,7 +349,11 @@ describe('useUploadMachine - Reducer Tests', () => {
           result: {
             status: 'verified',
             docType: 'NCB',
-            extractedData: { yearsNoClaims: 5 },
+            extractedData: {
+              yearsNoClaims: 5,
+              insurerName: 'Test Insurance',
+              validFrom: '2023-01-01',
+            },
           },
         },
       })

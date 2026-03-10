@@ -22,6 +22,12 @@ function uploadReducer(
   action: UploadAction
 ): UploadMachineState {
   switch (action.type) {
+    case 'SET_DOCUMENT_TYPE':
+      return {
+        ...state,
+        documentType: action.payload.documentType,
+      };
+
     case 'SELECT_FILE':
       return {
         ...state,

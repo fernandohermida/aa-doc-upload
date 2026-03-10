@@ -17,6 +17,7 @@ export interface UploadMachineState {
  * This ensures type-safe action creators and exhaustive checking
  */
 export type UploadAction =
+  | { type: 'SET_DOCUMENT_TYPE'; payload: { documentType: DocumentType } }
   | { type: 'SELECT_FILE'; payload: { file: File; documentType: DocumentType } }
   | { type: 'REMOVE_FILE' }
   | { type: 'START_UPLOAD' }

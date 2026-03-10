@@ -1,9 +1,7 @@
 import { useTransition } from 'react';
 import { useUploadMachine } from '../../hooks/useUploadMachine';
-import { useFileValidation } from '../../hooks/useFileValidation';
-import { submitDocumentForOcr } from '../../services/mockOcrService';
-import { simulateProgress } from '../../services/progressSimulator';
-import { mapErrorToUserMessage } from '../../utils/errorMapping';
+import { useDocumentSubmit } from '../../hooks/useDocumentSubmit';
+import { validateFile } from '../../utils/fileValidation';
 import { DocumentTypeSelector } from './DocumentTypeSelector';
 import { UploadZone } from './UploadZone';
 import { FilePreview } from '../FilePreview/FilePreview';
@@ -18,7 +16,7 @@ import type { DocumentType } from '../../types/ocr';
 export function DocumentUpload() {
   const [state, dispatch] = useUploadMachine();
   const [isPending, startTransition] = useTransition();
-  const { validate } = useFileValidation();
+  const { submit } = useDocumentSubmit({ dispatch, startTransition });
 
   const handleDocumentTypeChange = (docType: DocumentType): void => {
     if (state.file && state.file.size > 0) {
@@ -27,18 +25,17 @@ export function DocumentUpload() {
         payload: { file: state.file, documentType: docType },
       });
     } else {
-      // Store document type selection for later
-      const dummyFile = new File([], 'pending', { type: 'application/pdf' });
+      // Store document type selection without file
       dispatch({
-        type: 'SELECT_FILE',
-        payload: { file: dummyFile, documentType: docType },
+        type: 'SET_DOCUMENT_TYPE',
+        payload: { documentType: docType },
       });
     }
   };
 
   const handleFileSelect = (file: File): void => {
     // Validate file
-    const validation = validate(file);
+    const validation = validateFile(file);
     if (!validation.valid) {
       dispatch({
         type: 'UPLOAD_ERROR',
@@ -61,49 +58,7 @@ export function DocumentUpload() {
 
   const handleSubmit = (): void => {
     if (!state.file || !state.documentType || state.file.size === 0) return;
-
-    const currentFile = state.file;
-    const currentDocType = state.documentType;
-
-    startTransition(async () => {
-      try {
-        // Start upload phase
-        dispatch({ type: 'START_UPLOAD' });
-
-        // Simulate upload progress
-        await simulateProgress((progress) => {
-          dispatch({ type: 'UPLOAD_PROGRESS', payload: { progress } });
-        }, 500, 1000);
-
-        // Start scanning phase
-        dispatch({ type: 'START_SCANNING' });
-
-        // Simulate scanning progress with interval
-        let scanProgress = 0;
-        const progressInterval = setInterval(() => {
-          scanProgress = Math.min(scanProgress + 10, 90);
-          dispatch({
-            type: 'SCANNING_PROGRESS',
-            payload: { progress: scanProgress },
-          });
-        }, 200);
-
-        // Call OCR service
-        const result = await submitDocumentForOcr(currentFile, currentDocType);
-
-        clearInterval(progressInterval);
-
-        // Handle result
-        if (result.status === 'verified') {
-          dispatch({ type: 'UPLOAD_SUCCESS', payload: { result } });
-        } else {
-          dispatch({ type: 'UPLOAD_REJECTED', payload: { result } });
-        }
-      } catch (error) {
-        const errorMessage = mapErrorToUserMessage(error);
-        dispatch({ type: 'UPLOAD_ERROR', payload: { error: errorMessage } });
-      }
-    });
+    submit(state.file, state.documentType);
   };
 
   const handleRetry = (): void => {

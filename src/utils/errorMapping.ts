@@ -14,10 +14,18 @@ export function mapErrorCodeToMessage(errorCode: string): string {
   return errorMap[errorCode] || 'An unexpected error occurred. Please try again.';
 }
 
+import { isOcrServiceError } from '../types/errors';
+
 /**
  * Maps error objects to user-friendly messages
  */
 export function mapErrorToUserMessage(error: unknown): string {
+  // Check for OcrServiceError first (most specific)
+  if (isOcrServiceError(error)) {
+    return mapErrorCodeToMessage(error.code);
+  }
+
+  // Fallback to generic Error
   if (error instanceof Error) {
     return mapErrorCodeToMessage(error.message);
   }

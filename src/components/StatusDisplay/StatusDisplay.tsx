@@ -19,6 +19,64 @@ const STATUS_MESSAGES: Record<UploadState, string[]> = {
   ERROR: ['Something went wrong'],
 };
 
+const STATUS_CONFIG: Record<UploadState, {
+  bgColor: string;
+  borderColor: string;
+  textColor: string;
+  iconColor: string;
+  progressColor: string;
+}> = {
+  IDLE: {
+    bgColor: 'bg-gray-50',
+    borderColor: 'border-gray-200',
+    textColor: 'text-gray-900',
+    iconColor: 'text-gray-600',
+    progressColor: 'bg-gray-600',
+  },
+  SELECTED: {
+    bgColor: 'bg-gray-50',
+    borderColor: 'border-gray-200',
+    textColor: 'text-gray-900',
+    iconColor: 'text-gray-600',
+    progressColor: 'bg-gray-600',
+  },
+  UPLOADING: {
+    bgColor: 'bg-yellow-50',
+    borderColor: 'border-aa-yellow',
+    textColor: 'text-gray-900',
+    iconColor: 'text-aa-black',
+    progressColor: 'bg-aa-yellow',
+  },
+  SCANNING: {
+    bgColor: 'bg-yellow-50',
+    borderColor: 'border-aa-yellow',
+    textColor: 'text-gray-900',
+    iconColor: 'text-aa-black',
+    progressColor: 'bg-aa-yellow',
+  },
+  SUCCESS: {
+    bgColor: 'bg-emerald-50',
+    borderColor: 'border-emerald-200',
+    textColor: 'text-emerald-900',
+    iconColor: 'text-emerald-600',
+    progressColor: 'bg-emerald-600',
+  },
+  REJECTED: {
+    bgColor: 'bg-amber-50',
+    borderColor: 'border-amber-200',
+    textColor: 'text-amber-900',
+    iconColor: 'text-amber-600',
+    progressColor: 'bg-amber-600',
+  },
+  ERROR: {
+    bgColor: 'bg-red-50',
+    borderColor: 'border-red-200',
+    textColor: 'text-red-900',
+    iconColor: 'text-red-600',
+    progressColor: 'bg-red-600',
+  },
+};
+
 /**
  * Professional status display with enhanced progress indicators
  */
@@ -32,44 +90,7 @@ export function StatusDisplay({ status, progress }: StatusDisplayProps) {
     ? messages[Math.min(Math.floor(progress / 33), messages.length - 1)]
     : messages[0];
 
-  const getStatusConfig = () => {
-    switch (status) {
-      case 'SUCCESS':
-        return {
-          bgColor: 'bg-emerald-50',
-          borderColor: 'border-emerald-200',
-          textColor: 'text-emerald-900',
-          iconColor: 'text-emerald-600',
-          progressColor: 'bg-emerald-600',
-        };
-      case 'REJECTED':
-        return {
-          bgColor: 'bg-amber-50',
-          borderColor: 'border-amber-200',
-          textColor: 'text-amber-900',
-          iconColor: 'text-amber-600',
-          progressColor: 'bg-amber-600',
-        };
-      case 'ERROR':
-        return {
-          bgColor: 'bg-red-50',
-          borderColor: 'border-red-200',
-          textColor: 'text-red-900',
-          iconColor: 'text-red-600',
-          progressColor: 'bg-red-600',
-        };
-      default:
-        return {
-          bgColor: 'bg-yellow-50',
-          borderColor: 'border-aa-yellow',
-          textColor: 'text-gray-900',
-          iconColor: 'text-aa-black',
-          progressColor: 'bg-aa-yellow',
-        };
-    }
-  };
-
-  const config = getStatusConfig();
+  const config = STATUS_CONFIG[status];
 
   return (
     <div className={`mt-8 p-6 ${config.bgColor} rounded-2xl border ${config.borderColor} shadow-sm transition-all duration-300`}>

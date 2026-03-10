@@ -1,4 +1,5 @@
-import type { DocumentType, OcrResult, OcrServiceError } from '../types/ocr';
+import type { DocumentType, OcrResult } from '../types/ocr';
+import { OcrServiceError } from '../types/errors';
 
 // Configurable constants
 const UPLOAD_DELAY_MIN = 500;
@@ -22,7 +23,7 @@ function randomDelay(min: number, max: number): Promise<void> {
 function generateSuccessResponse(docType: DocumentType): OcrResult {
   const responses: Record<DocumentType, OcrResult> = {
     NCB: {
-      status: 'verified',
+      status: 'verified' as const,
       docType: 'NCB',
       extractedData: {
         yearsNoClaims: Math.floor(Math.random() * 10) + 1,
@@ -31,7 +32,7 @@ function generateSuccessResponse(docType: DocumentType): OcrResult {
       },
     },
     GAP_COVER: {
-      status: 'verified',
+      status: 'verified' as const,
       docType: 'GAP_COVER',
       extractedData: {
         gapDays: Math.floor(Math.random() * 90) + 1,
@@ -41,7 +42,7 @@ function generateSuccessResponse(docType: DocumentType): OcrResult {
       },
     },
     POLICY_SCHEDULE: {
-      status: 'verified',
+      status: 'verified' as const,
       docType: 'POLICY_SCHEDULE',
       extractedData: {
         insurer: 'Previous Insurance Ltd.',
@@ -68,7 +69,7 @@ function generateRejectionResponse(docType: DocumentType): OcrResult {
   const reason = reasons[Math.floor(Math.random() * reasons.length)];
 
   return {
-    status: 'rejected',
+    status: 'rejected' as const,
     docType,
     reason,
   };
@@ -90,9 +91,7 @@ export async function submitDocumentForOcr(
   // Simulate network error (5% chance)
   if (Math.random() < NETWORK_ERROR_RATE) {
     await randomDelay(5000, 5000); // 5 second timeout
-    const error = new Error('OCR_SERVICE_UNAVAILABLE') as OcrServiceError;
-    error.code = 'OCR_SERVICE_UNAVAILABLE';
-    throw error;
+    throw new OcrServiceError('OCR_SERVICE_UNAVAILABLE');
   }
 
   // Phase 1: Upload delay

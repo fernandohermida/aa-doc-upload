@@ -18,9 +18,11 @@ describe('mockOcrService', () => {
 
       expect(result.status).toBe('verified')
       expect(result.docType).toBe('NCB')
-      expect(result.extractedData).toBeDefined()
-      expect(result.extractedData).toHaveProperty('yearsNoClaims')
-      expect(result.extractedData).toHaveProperty('insurerName')
+      if (result.status === 'verified') {
+        expect(result.extractedData).toBeDefined()
+        expect(result.extractedData).toHaveProperty('yearsNoClaims')
+        expect(result.extractedData).toHaveProperty('insurerName')
+      }
     })
 
     it('should return verified result for GAP_COVER document type', async () => {
@@ -31,9 +33,11 @@ describe('mockOcrService', () => {
 
       expect(result.status).toBe('verified')
       expect(result.docType).toBe('GAP_COVER')
-      expect(result.extractedData).toBeDefined()
-      expect(result.extractedData).toHaveProperty('gapDays')
-      expect(result.extractedData).toHaveProperty('reason')
+      if (result.status === 'verified') {
+        expect(result.extractedData).toBeDefined()
+        expect(result.extractedData).toHaveProperty('gapDays')
+        expect(result.extractedData).toHaveProperty('reason')
+      }
     })
 
     it('should return verified result for POLICY_SCHEDULE document type', async () => {
@@ -44,9 +48,11 @@ describe('mockOcrService', () => {
 
       expect(result.status).toBe('verified')
       expect(result.docType).toBe('POLICY_SCHEDULE')
-      expect(result.extractedData).toBeDefined()
-      expect(result.extractedData).toHaveProperty('insurer')
-      expect(result.extractedData).toHaveProperty('policyNumber')
+      if (result.status === 'verified') {
+        expect(result.extractedData).toBeDefined()
+        expect(result.extractedData).toHaveProperty('insurer')
+        expect(result.extractedData).toHaveProperty('policyNumber')
+      }
     })
 
     it('should return rejected result when success rate check fails', async () => {
@@ -57,8 +63,10 @@ describe('mockOcrService', () => {
 
       expect(result.status).toBe('rejected')
       expect(result.docType).toBe('NCB')
-      expect(result.reason).toBeDefined()
-      expect(['ILLEGIBLE_DOCUMENT', 'DATE_MISMATCH']).toContain(result.reason)
+      if (result.status === 'rejected') {
+        expect(result.reason).toBeDefined()
+        expect(['ILLEGIBLE_DOCUMENT', 'DATE_MISMATCH']).toContain(result.reason)
+      }
     })
 
     it('should throw error when network error occurs', async () => {
@@ -76,21 +84,27 @@ describe('mockOcrService', () => {
       vi.spyOn(Math, 'random').mockReturnValue(0.8) // Ensure rejection
       const ncbResult = await submitDocumentForOcr(mockFile, 'NCB')
       expect(ncbResult.status).toBe('rejected')
-      expect(['ILLEGIBLE_DOCUMENT', 'DATE_MISMATCH']).toContain(ncbResult.reason)
+      if (ncbResult.status === 'rejected') {
+        expect(['ILLEGIBLE_DOCUMENT', 'DATE_MISMATCH']).toContain(ncbResult.reason)
+      }
 
       // Test GAP_COVER rejection reasons
       vi.restoreAllMocks()
       vi.spyOn(Math, 'random').mockReturnValue(0.8)
       const gapResult = await submitDocumentForOcr(mockFile, 'GAP_COVER')
       expect(gapResult.status).toBe('rejected')
-      expect(['DATE_MISMATCH', 'UNSUPPORTED_FORMAT']).toContain(gapResult.reason)
+      if (gapResult.status === 'rejected') {
+        expect(['DATE_MISMATCH', 'UNSUPPORTED_FORMAT']).toContain(gapResult.reason)
+      }
 
       // Test POLICY_SCHEDULE rejection reasons
       vi.restoreAllMocks()
       vi.spyOn(Math, 'random').mockReturnValue(0.8)
       const policyResult = await submitDocumentForOcr(mockFile, 'POLICY_SCHEDULE')
       expect(policyResult.status).toBe('rejected')
-      expect(['UNSUPPORTED_FORMAT', 'ILLEGIBLE_DOCUMENT']).toContain(policyResult.reason)
+      if (policyResult.status === 'rejected') {
+        expect(['UNSUPPORTED_FORMAT', 'ILLEGIBLE_DOCUMENT']).toContain(policyResult.reason)
+      }
     }, 10000) // 10 second timeout for multiple API calls
 
     it('should simulate realistic delays', async () => {
