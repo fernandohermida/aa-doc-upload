@@ -1029,7 +1029,7 @@ Status values: `Healthy` | `Degraded` | `Unhealthy`
 
 ## 13. Testing Strategy
 
-### 13.1 Unit Tests — No Azure Required
+### 13.1 Unit Tests
 
 All Azure dependencies are hidden behind interfaces:
 - `IDocumentIntelligenceAdapter` → returns canned `DocumentContent`
@@ -1038,11 +1038,6 @@ All Azure dependencies are hidden behind interfaces:
 - `IJobStateStore` → in-memory dictionary mock
 - `IJobHistoryRepository` → in-memory list mock
 
-**Test coverage targets:**
-- Pipeline orchestration: 100%
-- Guardrails: 100%
-- Domain logic: 100%
-- API endpoints: 90%
 
 ### 13.2 Integration Tests — Real Azure Calls
 
@@ -1068,42 +1063,6 @@ Simulated load test with 1000 concurrent users:
 
 ---
 
-## 14. Cost Analysis
-
-### 14.1 Per-Document Cost Breakdown
-
-**Assumptions:**
-- Average document: 2 pages, 800 words
-- Azure DI: $1.50 per 1000 pages
-- GPT-4o: Input $2.50/1M tokens, Output $10.00/1M tokens
-- Average prompt: 1200 tokens, average completion: 300 tokens
-
-| Service | Cost per Document | Notes |
-| --- | --- | --- |
-| **Azure Document Intelligence** | $0.003 | 2 pages × $1.50/1000 |
-| **GPT-4o (single call)** | $0.006 | (1200×$2.50 + 300×$10)/1M |
-| **Cosmos DB** | $0.0001 | ~10 RUs write + 5 RUs read |
-| **Redis** | $0.00001 | Negligible per operation |
-| **Total per document** | **$0.009** | ~$9 per 1000 documents |
-
-**Cost savings vs. v3.0 (double LLM call):** ~40% reduction (single LLM call + pre-LLM guardrails)
-
-### 14.2 Monthly Cost Projection
-
-**Scenario: 50,000 documents/month**
-
-| Service | Monthly Cost |
-| --- | --- |
-| Azure Document Intelligence | $150 |
-| Azure OpenAI (GPT-4o) | $300 |
-| Cosmos DB (25 GB storage) | $25 |
-| Azure Redis (Standard C1) | $75 |
-| App Service (P1v3) | $100 |
-| Application Insights | $25 |
-| **Total** | **$675/month** |
-
----
-
 ## 15. Deployment Architecture
 
 ### 15.1 Azure Resources
@@ -1123,18 +1082,6 @@ Resource Group: rg-aa-ocr-portal-prod
 ├── Azure Key Vault (connection strings, secrets)
 └── Managed Identity (assigned to App Service)
 ```
-
-### 15.2 Auto-Scaling Rules
-
-**App Service:**
-- Scale out when: Avg CPU > 70% for 5 min
-- Scale in when: Avg CPU < 30% for 10 min
-- Min instances: 2 (high availability)
-- Max instances: 5
-
-**Cosmos DB:**
-- Autoscale: 400 RU/s (min) to 4000 RU/s (max)
-- Triggers on RU consumption
 
 ---
 
