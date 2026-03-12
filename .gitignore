@@ -32,6 +32,3 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Claude Code files (AI assistant configuration)
-CLAUDE.md
-.claude/
